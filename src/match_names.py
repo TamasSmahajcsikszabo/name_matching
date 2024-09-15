@@ -38,18 +38,12 @@ def lookup(entry, term, result):
     best_match = find_best_match(found)
     if len(best_match) == 1:
         found_term, confidence = best_match[0]
-        if confidence > 0.65:
-            result.append((term, found_term, confidence))
-        else:
-            result.append((term, 'UNKNOWN', 0.0))
+        result.append((term, found_term, confidence))
     elif len(best_match) > 1:
         best_match = set(best_match)
         for matching in best_match:
             found_term, confidence = matching
-            if confidence > 0.65:
-                result.append((term, found_term, confidence))
-            else:
-                result.append((term, 'UNKNOWN', 0.0))
+            result.append((term, found_term, confidence))
 
 
 def match_names(entry, term):
@@ -101,7 +95,6 @@ if __name__ == '__main__':
         help="Runs a built in quick run in test terms",
         action="store_true")
     args = parser.parse_args()
-    print(args)
 
     if args.terms is not None and len(args.terms) > 0:
         print(match_names(entry, args.terms[0]))
