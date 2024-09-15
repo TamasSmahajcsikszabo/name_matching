@@ -1,6 +1,5 @@
 import os
 import pathlib
-import pandas as pd
 from build_library import (load_library,
                            lookupLibrarySection,
                            lookupTermInSection)
@@ -15,11 +14,14 @@ def find_best_match(results):
         Parameters:
             results: list of tuples of (finding[str], confidence score [float])
     '''
-    confidence_scores = [result[1] for result in results]
-    max_confidence_score = max(confidence_scores)
-    best_match = [result for result in results
-                  if result[1] == max_confidence_score]
-    return best_match
+    try:
+        confidence_scores = [result[1] for result in results]
+        max_confidence_score = max(confidence_scores)
+        best_match = [result for result in results
+                      if result[1] == max_confidence_score]
+        return best_match
+    except BaseException as ex:
+        return None
 
 
 def lookup(entry, term, result):
@@ -36,14 +38,18 @@ def lookup(entry, term, result):
     section = lookupLibrarySection(entry, term)
     found = lookupTermInSection(section, term)
     best_match = find_best_match(found)
-    if len(best_match) == 1:
-        found_term, confidence = best_match[0]
-        result.append((term, found_term, confidence))
-    elif len(best_match) > 1:
-        best_match = set(best_match)
-        for matching in best_match:
-            found_term, confidence = matching
+    if best_match is None:
+        result.append((term, "Unknown", 0.0))
+    else:
+        if len(best_match) == 1:
+            found_term, confidence = best_match[0]
             result.append((term, found_term, confidence))
+        elif len(best_match) > 1:
+            best_match = set(best_match)
+            for matching in best_match:
+                if matching is not None:
+                    found_term, confidence = matching
+                result.append((term, found_term, confidence))
 
 
 def match_names(entry, term):
