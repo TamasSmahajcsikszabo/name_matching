@@ -1,6 +1,6 @@
 ## Name Matching Utility
-This is a name matchin utility written in Python.
-Under `src` you can find all the source code, the main function and `argsparse` utility is provided in `src/match_names.py`.
+This is a name matching utility written in Python3.x.
+Under `src` you can find all the source code, the main function and `argparse` utility is provided in `src/match_names.py`.
 
 ### Jupyter Notebook
 You can play through the examples provided by notebook `MatchNamesExample.ipynb`.
